@@ -1,0 +1,39 @@
+To create a pod
+#kubectl run "podname" --image="imagename"
+
+To get the running pods
+#kubectl get pods
+
+To delete the pods
+#kubectl delete pod "podname"
+
+
+----------------------------------------------------------------------------
+
+Creating pod with yaml
+Perform a trial create and also validate the yaml
+#kubectl create -f file.pod.yml --dry-run --validate=true 
+
+create a pod from yaml
+#kubectl create -f file.pod.yaml
+
+Alternate way to create or apply changes to a pod from yaml
+#kubectl apply -f file.pod.yaml
+
+use --save-config when you want to use kubectl apply in future
+kubectl create -f file.pod.yaml --save-config
+
+To get info about the pods. This will also show annotaions if --save-config was used to create the pods
+#kubectl get pod "podname" -o yaml 
+
+TO get informations about pod, container and events
+#kubectl describe pod "podname"
+
+To get into the container of the pod interactively
+#kubectl exec my-nginx -it -- sh 
+
+To edit the pod 
+#kubectl edit -f nginx.pod.yaml
+
+To delete the pod
+#kubectl delete -f nginx.pod.yaml 
