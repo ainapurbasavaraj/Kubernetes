@@ -36,4 +36,33 @@ To edit the pod
 #kubectl edit -f nginx.pod.yaml
 
 To delete the pod
-#kubectl delete -f nginx.pod.yaml 
+#kubectl delete -f nginx.pod.yaml
+
+---------------------DEPLOYMENTS---------------------------------------------------
+create a Deployment
+#kubectl create -f file.deployment.yaml
+
+create or apply Deployment
+#kubectl apply -f file.deployment.yaml
+
+To get deployments
+#kubectl get deployments
+
+list all deployments and their labels
+#kubectl get deployment --show-labels
+
+To get info about a deployment with specific label
+#kubectl get deployment -l app="label name"
+
+To delte deployment
+#kubectl delete deployment file.deployment.yaml
+
+To scale the deployment pods to 5
+#kubectl scale deployment "deployment-name" --replicas=5
+
+scale by referencing yaml file
+#kubectl scale -f file.deployment.yaml --replicas=5
+
+we can also scale by putting replicas in yaml file
+
+ 
