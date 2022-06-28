@@ -7,7 +7,11 @@ To get the running pods
 To delete the pods
 #kubectl delete pod "podname"
 
+To get all the containers and cluster ip
+#kubectl get all
 
+Exec to get into the pods
+#kubectl exec -it pod-name sh
 ----------------------------------------------------------------------------
 
 Creating pod with yaml
@@ -65,4 +69,20 @@ scale by referencing yaml file
 
 we can also scale by putting replicas in yaml file
 
- 
+exposing port for deployment's pod
+#kubectl port-forward deployment/[deployment-name] 8080
+
+----------------------SERVICES-------------------------------------------------------------
+
+Exposing port for Service's pod
+#kubectl port-forward service/[service-name] 8080
+
+
+To apply services
+#kubectl apply -f file.service.yaml
+
+To get Services
+#kubectl get services
+
+To delete services
+#kubectl delete service "serivce-name" 

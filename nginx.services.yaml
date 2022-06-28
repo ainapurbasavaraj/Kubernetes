@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-clusterip #name of the service.
+spec:
+  type: ClusterIP
+  selector:
+    app: my-nginx #Name of the pod label to which this service will be applied to
+  ports:
+  - port: 8080
+    targetPort: 80
+
