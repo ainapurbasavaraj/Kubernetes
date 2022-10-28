@@ -208,3 +208,19 @@ Pod can be run on specific node by specifying node name in the yaml
 - All init containers must be successful only then App containers will start
 - Run to completion
 
+#################################
+###Working with Services
+- Load Balancer
+- kube-proxy agent runs on each nodes and provide load balancer for the pods running on nodes. It use IPtables.
+- IPTable Rules
+- Types of Service
+clusterip    Create a ClusterIP service - Default
+nodeport     Create a NodePort service
+
+externalname Create an ExternalName service
+loadbalancer Create a LoadBalancer service
+
+#########################################
+kubectrl manager manages object replicaset
+kubectlr manager takes care of desired state of pods which is configured by replicaset
+
