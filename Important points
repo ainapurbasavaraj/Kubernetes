@@ -1,0 +1,210 @@
+Deploy 10 Web Servers (HTTPD, Apache, Tomcat, NGINX)
+
+Virtualization - Couple of Hours
+- VMWare Workstation
+- Download an ISO - CentOS
+- ISO Image size - 10GB
+- Downlaod time - 10 Min
+- Create a VM - 15 Min * 10 = Couple Hours
+- Storage - 10GB * 10 = 100GB
+- Install and Configure Web Server - NGINX
+
+
+Containerization - Couple of Minutes
+- Docker Engine
+- Pull an Image - NGINX
+- Image size - 142MB
+- Pull time - Less than Min
+- Create and Start a Container - Few seconds * 10 = Less than a Min
+- Storage - 142MB + Few KB' = 142 MB
+
+Note - No Guest OS!
+
+###Working with Docker
+- docker --version
+- docker version
+- docker system info
+
+Docker Root Dir: /var/lib/docker
+Registry: https://index.docker.io/v1/
+
+/etc/docker/daemon.json
+
+{ 
+  "data-root": "/new_dir_structure/docker"
+}
+
+{
+  "registry-mirrors": [
+    "https://hub-mirror.c.163.com",
+    "https://mirror.baidubce.com"
+  ]
+}
+
+
+{
+  "insecure-registries" : ["myregistrydomain.com:5000"]
+}
+
+
+/usr/lib/systemd/system/docker.service
+
+
+ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock --block-registry=docker.io
+
+
+
+###Docker management Commands
+  container   Manage containers
+  image       Manage images
+  network     Manage networks
+  volume      Manage volumes
+
+
+###Docker Container management
+- create + start = run
+
+
+-it
+-dit
+-d
+
+ctrl+p+q
+
+###Storage Management
+- Ephemeral Storage
+- /var/lib/docker/overlay2/
+
+- Persistent Storage
+- Volume Mounts
+- /var/lib/docker/volumes/
+
+- Bind Mounts - Depricated!
+- Anywhere - Docker Engine
+
+
+###Docker Image Management
+- Search/Filter and Pull Images - [Kalyan]
+Docker Official Image
+Verified Publisher
+Sponsored OSS
+
+docker.io/library/alpine:latest = registry/repository/image:ver
+
+docker image pull vmware.io/repo/alpine
+
+###Docker Networking
+
+
+[root@docker-engine ~]# docker network ls
+NETWORK ID     NAME      DRIVER    SCOPE
+ac632bf8efa9   bridge    bridge    local
+70ada7185a92   host      host      local
+eb4a7b197fb0   none      null      local
+
+
+#Bridge Network
+- bridge
+- "Subnet": "172.17.0.0/16"
+- 172.17.0.2 to 172.17.255.254
+- docker0
+- Linux Bridge Device
+- 172.17.0.1 - Gateway
+
+#None Network
+
+#Host Network
+
+#Multi-tier App
+UI - net01
+Web - net01 and net02
+DB - net02
+
+
+###Deploying Multi-tier App
+
+docker network create net01
+docker container run --name mysql --network net01 --restart always -dit -v mysql-volume:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=Passw0rd! mysql:5.7
+docker container run --name ghost -dit --network net01 --restart always -v ghost-volume:/var/lib/ghost -p 80:2368 -e database_client=mysql -e database_connection_host=mysql -e database_connection_user=root -e database_connection_password=Passw0rd! -e database_connection_database=ghost ghost:1-alpine
+
+#Clean up
+
+docker container rm `docker container ls -aq` -f
+docker image rm `docker image ls -aq` -f
+docker volume prune -f
+docker network prune -f
+
+###Docker Compose
+
+###Docker SWARM
+
+
+###Drawbacks working with Standalone Docker Engine
+- If Docker Engine is down
+- Scalability
+- No Centralized
+- Management
+- Security
+- Storage
+- Networking
+
+Containers vs Pods
+
+Pod - Pod is a collection of containers that can run on a host
+
+###Kubernetes Architecture
+- Master
+- kube-apiserver
+- etcd
+- kube-scheduler
+- kube-controller-manager
+
+- coreDNS - Service Discovery
+
+- kubelet
+- CRI
+- kube-proxy
+- Overlay Network Plug-in - Pod to Pod communication
+
+- Node
+- kubelet
+- CRI
+- kube-proxy
+- Overlay Network Plug-in - Pod to Pod communication
+
+
+###Various Communications withing Kubernetes
+- Between Container to Container running inside the same Pod - Loopback:Port or localhost:Port
+- Betwwwn Pod to Pod running on the same Node - Linux Bridge
+- Betwwwn Pod to Pod running on the different Nodes - Overlay - Weave-net
+- Between Service to a Pod - kube-proxy
+
+
+###Scheduling Pods
+- Dynamic Scheduling - Default
+- Manual Scheduling
+nodeName: eoc-kubenode1
+- Static Pod
+
+
+What are Static pods?
+###############################################
+kubelet can be used to create static pods
+k8s control pane pods are created with help of static pods.
+kubelet is the system service of k8s which run on master nodes and other nodes
+We can create yaml file in a path and give that path in kubelet config file to create static pod
+
+Static pod is pod which is created locally by kubelet. Then kubelet will inform kube-apiserver and then apiserver will update etcd
+
+During setting up of k8s cluster, Kubeadm  instructs kubectl to create static pods for control pane(api-server, kube scheduler, etcd, kube controller)
+
+###########################################################################
+Pod can be run on specific node by specifying node name in the yaml
+
+
+
+###Init Containers############################
+- Started before App Containers
+- All init containers must be successful only then App containers will start
+- Run to completion
+
